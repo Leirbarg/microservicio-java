@@ -1,0 +1,60 @@
+name: CI
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonacion de codigo
+        uses: actions/checkout@v4    # Checkout
+      #compilo con java 8 
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+      - name: Compilacion
+        run: |
+          mvn package
+          #echo 'package'
+      - name: Ejecucion Test Unitario
+        run: |
+          mvn package test
+          
+       # compilo de nuevo para sonarcloud 
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Compilacion
+        run: |
+          mvn package
+          #echo 'package'
+      - name: Analisis SonarCloud
+        run: |
+          mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+          -Dsonar.token=${{secrets.SONAR_TOKEN}} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.organization=leirbarg\
+          -Dsonar.projectKey=Leirbarg_microservicio-java
+
+       - name: SonarQube Quality Gate Check
+
+          uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+          with:
+    # Location of the scanner metadata report file
+          scanMetadataReportFile: target/sonar/report-task.txt
+          
+          
+      - name: Docker Login
+        uses: docker/login-action@v3.1.0
+        with:
+          username:
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Docker build
+        run:
+          docker build -t usach/ms-aumento-voto:lates .
+      - name: Docker push
+        run:
+          docker push usach/ms-aumento-voto:lates
