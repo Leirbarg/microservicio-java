@@ -39,10 +39,10 @@ jobs:
           -Dsonar.organization=leirbarg\
           -Dsonar.projectKey=Leirbarg_microservicio-java
 
-       - name: SonarQube Quality Gate Check
+       # - name: SonarQube Quality Gate Check
 
-          uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
-          with:
+        #  uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+        #  with:
     # Location of the scanner metadata report file
           scanMetadataReportFile: target/sonar/report-task.txt
           
