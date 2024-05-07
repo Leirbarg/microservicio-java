@@ -37,13 +37,13 @@ jobs:
           -Dsonar.token=${{secrets.SONAR_TOKEN}} \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.organization=leirbarg\
-          -Dsonar.projectKey=Leirbarg_microservicio-java
-          -Dsonar.projectKey=Leirbarg_microservicio-java
+          -Dsonar.projectKey=Leirbarg_microservicio-java2
+          
 
       - name: SonarQube Quality Gate Check
         uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         with:
          scanMetadataReportFile: target/sonar/report-task.txt
           
-          
+         
 
