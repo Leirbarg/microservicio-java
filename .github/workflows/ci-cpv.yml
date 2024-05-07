@@ -44,6 +44,18 @@ jobs:
         uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         with:
          scanMetadataReportFile: target/sonar/report-task.txt
+
+      - name: Docker Login
+        uses: docker/login-action@v3.1.0
+        with:
+          username: cpere
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Docker build
+        run:
+          docker build -t cpere/microservicio-java .
+      - name: Docker push
+        run:
+          docker push cpere/microservicio-java
           
          
 
