@@ -33,14 +33,11 @@ jobs:
           #echo 'package'
       - name: Analisis SonarCloud
         run: |
-          ./mvnw -B verify sonar:sonar  \
-          #mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
-          -Dsonar.login=$token-microservicio-java \
-          -Dsonar.token=${{secrets.token-microservicio-java}} \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.organization=leirbarg\
-          -Dsonar.projectKey=Leirbarg_microservicio-java2
-
+           mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+           -Dsonar.token=${{secrets.SONAR_TOKEN}} \
+           -Dsonar.host.url=https://sonarcloud.io \
+           -Dsonar.organization=leirbarg\
+           -Dsonar.projectKey=Leirbarg_microservicio-java2
 
 
       - name: Docker Login
