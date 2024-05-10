@@ -1,4 +1,4 @@
-name: SonarCloud Analysis and Docker Deployment
+name: CI
 
 on:
   push:
