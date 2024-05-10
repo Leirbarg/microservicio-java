@@ -31,14 +31,14 @@ jobs:
         run: |
           mvn package
           #echo 'package'
-      - name: Analisis SonarCloud  # se agregaron todos los permisos
+      - name: Analisis SonarCloud  
         run: |
            mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
            -Dsonar.token=${{secrets.SONAR_TOKEN}} \
            -Dsonar.host.url=https://sonarcloud.io \
-           -Dsonar.organization=leirbarg\
+           -Dsonar.organization=leirbarg\         
            -Dsonar.projectKey=Leirbarg_microservicio-java2
-
+     # se agregaron permisos de arminatrador
     # despliego en docker   
     
       - name: Docker Login #
