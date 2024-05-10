@@ -47,7 +47,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASS }}
       - name: Docker build
         run:
-          docker build -t cpere/microservicio-java . # indica que el archivo esta en la raiz del directorio
+          docker build -t cpere/microservicio-java . ## indica que el archivo esta en la raiz del directorio
       - name: Docker push
         run:
           docker push cpere/microservicio-java:latest
