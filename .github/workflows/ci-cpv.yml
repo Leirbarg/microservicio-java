@@ -1,23 +1,18 @@
 name: CI
-
 on:
   push:
-    branches:
-      - main  # Se activa en push a la rama "main"
-
 jobs:
-  sonarcloud-and-docker:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.1
-
-      - name: Set up JDK  # Paso para configurar el JDK de Java
-        uses: actions/setup-java@v2
+      - name: Clonacion de codigo
+        uses: actions/checkout@v4    # Checkout
+      #compilo con java 8 
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.1
         with:
-          java-version: '17'  # Versión de Java a utilizar
-
+          java-version: '8'
+          distribution: 'temurin'
       - name: Compilacion
         run: |
           mvn package    
@@ -25,26 +20,37 @@ jobs:
       - name: Ejecucion Test Unitario
         run: |
           mvn package test
-
-      - name: SonarCloud Analysis
+          
+       # compilo de nuevo para sonarcloud 
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Compilacion
         run: |
-          mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
-          -Dsonar.projectKey=Leirbarg_microservicio-java2 \
-          -Dsonar.organization=leirbarg \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$SONAR_TOKEN
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          mvn package
+          #echo 'package'
+      #- name: Analisis SonarCloud
+      #  run: |
+      #     mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+      #     -Dsonar.token=${{secrets.SONAR_TOKEN}} \
+      #     -Dsonar.host.url=https://sonarcloud.io \
+      #     -Dsonar.organization=leirbarg\
+      #     -Dsonar.projectKey=Leirbarg_microservicio-java2
 
+    # despliego en docker   
+    
       - name: Docker Login
         uses: docker/login-action@v3.1.0
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Docker Build and Push
-        run: |
-          docker build -t cpere/microservicio-java .
+          username: cpere
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Docker build
+        run:
+          docker build -t cpere/microservicio-java . ## indica que el archivo esta en la raiz del directorio
+      - name: Docker push
+        run:
           docker push cpere/microservicio-java:latest
           
          
